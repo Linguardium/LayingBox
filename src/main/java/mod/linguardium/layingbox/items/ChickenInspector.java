@@ -24,10 +24,12 @@ public class ChickenInspector extends Item {
     public ActionResult useOnBlock(ItemUsageContext context) {
         BlockEntity be =context.getWorld().getBlockEntity(context.getBlockPos());
         if (be instanceof LayingBoxEntity) {
-            for (ItemStack stack : ((LayingBoxEntity) be).chickens) {
-                Entity entity = EntityType.getEntityFromTag(stack.getOrCreateSubTag("EntityTag"), context.getWorld()).orElse(null);
-                if (entity instanceof ChickenStats) {
-                    context.getPlayer().sendMessage(new TranslatableText("message.layingbox.production",entity.getDisplayName(), ((ChickenStats) entity).getProduction()/100.0f),false);
+            if (!context.getWorld().isClient()) {
+                for (ItemStack stack : ((LayingBoxEntity) be).chickens) {
+                    Entity entity = EntityType.getEntityFromTag(stack.getOrCreateSubTag("EntityTag"), context.getWorld()).orElse(null);
+                    if (entity instanceof ChickenStats) {
+                        context.getPlayer().sendMessage(new TranslatableText("message.layingbox.production", entity.getDisplayName(), ((ChickenStats) entity).getProduction() / 100.0f), false);
+                    }
                 }
             }
             return ActionResult.SUCCESS;
@@ -38,7 +40,9 @@ public class ChickenInspector extends Item {
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         if (entity instanceof ChickenStats) {
-            user.sendMessage(new TranslatableText("message.layingbox.production",entity.getDisplayName(), ((ChickenStats) entity).getProduction()/100.0f),false);
+            if (!user.world.isClient()) {
+                user.sendMessage(new TranslatableText("message.layingbox.production", entity.getDisplayName(), ((ChickenStats) entity).getProduction() / 100.0f), false);
+            }
             return ActionResult.SUCCESS;
         }
         return super.useOnEntity(stack, user, entity, hand);
