@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"side": "block/stonecutter_bottom",
+		"end": "layingbox:block/egg_collector_top",
+		"particle": "block/stonecutter_bottom"
+	}
+}

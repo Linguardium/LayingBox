@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "layingbox",
+  "version": "${version}",
+  "name": "LayingBox",
+  "description": "Adds laying boxes and more",
+  "authors": [
+    "linguardium"
+  ],
+  "contributors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/layingbox/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "mod.linguardium.layingbox.LayingBoxMain"
+    ],
+    "client": [
+      "mod.linguardium.layingbox.LayingBoxMainClient"
+    ],
+    "server": []
+  },
+  "mixins": [
+    "layingbox.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}

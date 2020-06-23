@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "layingbox:block/laying_box",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "layingbox:block/laying_box"
+    },
+    "facing=south": {
+      "model": "layingbox:block/laying_box",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "layingbox:block/laying_box",
+      "y": 270
+    }
+  }
+}
