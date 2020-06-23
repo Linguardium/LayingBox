@@ -1,9 +1,7 @@
 package mod.linguardium.layingbox.entity;
 
-import jdk.internal.loader.Resource;
 import mod.linguardium.layingbox.api.ChickenStats;
 import mod.linguardium.layingbox.api.LayingBoxProvider;
-import mod.linguardium.layingbox.config.ChickenConfigs;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.*;

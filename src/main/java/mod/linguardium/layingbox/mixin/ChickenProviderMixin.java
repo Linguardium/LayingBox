@@ -5,7 +5,6 @@ import mod.linguardium.layingbox.api.LayingBoxProvider;
 import mod.linguardium.layingbox.config.ChickenConfigs;
 import mod.linguardium.layingbox.entity.ResourceChicken;
 import net.fabricmc.fabric.api.util.NbtType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.data.DataTracker;

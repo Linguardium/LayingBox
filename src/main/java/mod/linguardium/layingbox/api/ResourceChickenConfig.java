@@ -1,6 +1,6 @@
 package mod.linguardium.layingbox.api;
 
-import net.minecraft.util.Identifier;
+
 
 public class ResourceChickenConfig {
     public int base_color=-1;

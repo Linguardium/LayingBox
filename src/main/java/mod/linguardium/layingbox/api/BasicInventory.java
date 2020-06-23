@@ -1,6 +1,6 @@
 package mod.linguardium.layingbox.api;
 
-import net.minecraft.inventory.Inventory;
+
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;

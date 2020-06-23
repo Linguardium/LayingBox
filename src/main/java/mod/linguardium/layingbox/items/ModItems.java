@@ -1,10 +1,7 @@
 package mod.linguardium.layingbox.items;
 
 import mod.linguardium.layingbox.LayingBoxMain;
-import net.fabricmc.fabric.impl.content.registry.FuelRegistryImpl;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 

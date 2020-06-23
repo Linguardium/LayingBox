@@ -1,12 +1,11 @@
 package mod.linguardium.layingbox.config;
 
 
-import com.google.common.collect.*;
-import com.google.common.io.PatternFilenameFilter;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.swordglowsblue.artifice.api.Artifice;
-import com.swordglowsblue.artifice.api.ArtificeResourcePack;
 import mod.linguardium.layingbox.LayingBoxMain;
 import mod.linguardium.layingbox.api.ResourceChickenConfig;
 import mod.linguardium.layingbox.entity.ResourceChicken;
@@ -22,7 +21,6 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -36,7 +34,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static mod.linguardium.layingbox.LayingBoxMain.MOD_ID;
 import static mod.linguardium.layingbox.LayingBoxMain.log;
