@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Collection;
@@ -45,8 +46,8 @@ public abstract class ChickenProviderMixin extends AnimalEntity implements Layin
         this.dataTracker.startTracking(PRODUCTION, 0);
     }
 
-    @Override
-    public ChickenEntity createChild(PassiveEntity passiveEntity) {
+    @Inject(method="createChild",at=@At("TAIL"),cancellable = true)
+    private void LayingBox_MakinBabies(PassiveEntity passiveEntity, CallbackInfoReturnable info) {
         Identifier parent1=EntityType.getId(this.getType());
         Identifier parent2=EntityType.getId(passiveEntity.getType());
         Collection<EntityType<ResourceChicken>> children = ChickenConfigs.BreedingMap.get(Pair.of(parent1,parent2));
@@ -60,7 +61,7 @@ public abstract class ChickenProviderMixin extends AnimalEntity implements Layin
         }
         if (passiveEntity instanceof ChickenStats)
             ((ChickenStats)baby).setProduction(ChickenStats.averagePlusProduction(world.getRandom(),this, (ChickenStats) passiveEntity));
-        return baby;
+        info.setReturnValue(baby);
     }
 
     @Override

@@ -34,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static mod.linguardium.layingbox.LayingBoxMain.MOD_ID;
 import static mod.linguardium.layingbox.LayingBoxMain.log;
@@ -46,45 +47,46 @@ public class ChickenConfigs {
     public static Path chickenConfigPath = Paths.get( FabricLoader.getInstance().getConfigDirectory().toString() + File.separatorChar + MOD_ID + File.separator + "chickens");
     private static Gson g = new GsonBuilder().setPrettyPrinting().create();
 
-    private static void processFolder(File folder) {
-        for (File fName : folder.listFiles()) {
+    private static void processFolder(Path folder) throws IOException {
+        for (Path fName : Files.list(folder).collect(Collectors.toList())) {
             if (fName.equals(folder))
                 continue;
-            if(fName.isDirectory()) {
+            if(Files.isDirectory(fName)) {
                 processFolder(fName);
-            }else if (fName.getName().endsWith(".json")) {
+            }else if (fName.getFileName().toString().endsWith(".json")) {
                 processJson(fName);
             }
         }
     }
-    private static void processJson(File file) {
+    private static void processJson(Path file) {
         ResourceChickenConfig chickenConfig = null;
         try {
-            chickenConfig = g.fromJson(new String(Files.readAllBytes(file.toPath())), ResourceChickenConfig.class);
+            chickenConfig = g.fromJson(new String(Files.readAllBytes(file)), ResourceChickenConfig.class);
         } catch (IOException e) {
-            log(Level.ERROR,"failed to process "+file.getAbsoluteFile());
+            log(Level.ERROR,"failed to process "+file.getFileName());
         }
-        String name = file.getName().substring(0,file.getName().lastIndexOf("."));
+        String name = file.getFileName().toString().substring(0,file.getFileName().toString().lastIndexOf("."));
         register(name,chickenConfig);
-
     }
     public static void init() {
         try {
             if (!chickenConfigPath.toFile().exists()) {
-                Files.createDirectory(chickenConfigPath);
+                Files.createDirectories(chickenConfigPath);
             }
-            processFolder(chickenConfigPath.toFile());
+            processFolder(chickenConfigPath);
             for(ModContainer container : FabricLoader.getInstance().getAllMods()) {
-                Path layingbox_static_data = Paths.get(container.getRootPath().toString(),"static_data","layingbox","chickens");
-                if (layingbox_static_data.toFile().exists() && layingbox_static_data.toFile().isDirectory()) {
+
+                Path layingbox_static_data = container.getRootPath().resolve("static_data/layingbox/chickens");
+
+                if (Files.exists(layingbox_static_data) && Files.isDirectory(layingbox_static_data)) {
                     log(Level.INFO,"Found LayingBox chicken data in mod: "+container.getMetadata().getName());
-                    processFolder(layingbox_static_data.toFile());
+                    processFolder(layingbox_static_data);
                 }
             }
             Path layingbox_static_data = Paths.get(FabricLoader.getInstance().getGameDirectory().toString(),"static_data","layingbox","chickens");
             if (layingbox_static_data.toFile().exists()) {
                 log(Level.INFO,"Found LayingBox chicken data in the minecraft directory");
-                processFolder(layingbox_static_data.toFile());
+                processFolder(layingbox_static_data);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -26,13 +26,17 @@ public class LayingBoxEntity extends BlockEntity implements BlockEntityClientSer
     //List<LayingBoxProvider<LivingEntity>> chickens = new ArrayList<>();
     public MobEntity displayChicken=null;
     int tickTimer = 0;
+    int tickMulti = 1;
     public LayingBoxEntity() {
         super(ModBlocks.LAYING_BOX_ENTITY);
         inventory = new BasicInventory(9);
         chickens = DefaultedList.of();
         tickTimer = 6000;
     }
-
+    public LayingBoxEntity(int tickMulti) {
+        this();
+        this.tickMulti=tickMulti;
+    }
     public MobEntity removeChicken() {
         MobEntity chicken = null;
         if (chickens.size() > 0) {
@@ -94,6 +98,11 @@ public class LayingBoxEntity extends BlockEntity implements BlockEntityClientSer
         if (tag.contains("tickTime",NbtType.INT)) {
             tickTimer=tag.getInt("tickTime");
         }
+        if (tag.contains("tickMulti",NbtType.INT)) {
+            tickMulti=tag.getInt("tickMulti");
+        }else{
+            tickMulti=1;
+        }
     }
 
     private CompoundTag WriteEntityTag(Entity e,CompoundTag tag) {
@@ -112,6 +121,7 @@ public class LayingBoxEntity extends BlockEntity implements BlockEntityClientSer
         }
         tag.put("Chickens",chickensTag);
         tag.putInt("tickTime",tickTimer);
+        tag.putInt("tickMulti",tickMulti);
         return tag;
     }
 
@@ -138,9 +148,9 @@ public class LayingBoxEntity extends BlockEntity implements BlockEntityClientSer
     @Override
     public void tick() {
         if (!world.isClient()) {
-            tickTimer--;
+            tickTimer-=tickMulti;
             if (tickTimer <= 0) {
-                tickTimer = this.world.random.nextInt(300) + 0;
+                tickTimer = this.world.random.nextInt(6000) + 6000;
                 for (ItemStack itm : chickens) {
                     LayingBoxProvider<MobEntity> p = (LayingBoxProvider<MobEntity>) EntityType.getEntityFromTag(itm.getOrCreateSubTag("EntityTag"),world).orElse(null);
                     if (p != null) {

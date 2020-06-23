@@ -31,7 +31,7 @@ public class LayingBox extends HorizontalFacingBlock implements InventoryProvide
         if (blockEntity instanceof LayingBoxEntity) {
             MobEntity e;
             while ((e = ((LayingBoxEntity) blockEntity).removeChicken()) != null) {
-                e.resetPosition(pos.getX(),pos.getY(),pos.getZ());
+                e.updatePosition(pos.getX()+0.5,pos.getY()+0.25,pos.getZ()+0.5);
                 world.spawnEntity(e);
             }
         }
