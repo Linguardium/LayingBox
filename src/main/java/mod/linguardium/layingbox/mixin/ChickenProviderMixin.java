@@ -1,5 +1,6 @@
 package mod.linguardium.layingbox.mixin;
 
+import mod.linguardium.layingbox.LayingBoxMain;
 import mod.linguardium.layingbox.api.ChickenStats;
 import mod.linguardium.layingbox.api.LayingBoxProvider;
 import mod.linguardium.layingbox.config.ChickenConfigs;
@@ -20,6 +21,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,8 +31,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static mod.linguardium.layingbox.config.ChickenConfigs.isFavoredBiome;
 
 @Mixin(ChickenEntity.class)
 public abstract class ChickenProviderMixin extends AnimalEntity implements LayingBoxProvider<ChickenEntity>, ChickenStats {
@@ -47,20 +52,29 @@ public abstract class ChickenProviderMixin extends AnimalEntity implements Layin
     }
 
     @Inject(method="createChild",at=@At("TAIL"),cancellable = true)
-    private void LayingBox_MakinBabies(PassiveEntity passiveEntity, CallbackInfoReturnable info) {
+    private void LayingBox_MakinBabies(PassiveEntity passiveEntity, CallbackInfoReturnable<ChickenEntity> info) {
         Identifier parent1=EntityType.getId(this.getType());
         Identifier parent2=EntityType.getId(passiveEntity.getType());
-        Collection<EntityType<ResourceChicken>> children = ChickenConfigs.BreedingMap.get(Pair.of(parent1,parent2));
-        children.addAll(ChickenConfigs.BreedingMap.get(Pair.of(parent2,parent1)));
+        List<EntityType<ResourceChicken>> children = new ArrayList<>(ChickenConfigs.BreedingMap.get(Pair.of(parent1, parent2)));
+        if (!parent1.equals(parent2))
+            children.addAll(ChickenConfigs.BreedingMap.get(Pair.of(parent2,parent1)));
         ChickenEntity baby;
-        if (world.getRandom().nextFloat()>1.0 || children.size()<1) {
-            baby = (ChickenEntity) this.getType().create(this.world);
-        }else {
-            EntityType<ChickenEntity> child = (EntityType<ChickenEntity>) children.toArray()[world.getRandom().nextInt(children.size())];
+        boolean explicit = world.getGameRules().getBoolean(LayingBoxMain.requireBiomes);
+        Biome biome_parent1 = world.getBiome(this.getBlockPos());
+        Biome biome_parent2 = passiveEntity.getEntityWorld().getBiome(passiveEntity.getBlockPos());
+        List<EntityType<ResourceChicken>> favorites = children.stream().filter(type->(isFavoredBiome(type,biome_parent1,explicit) || isFavoredBiome(type,biome_parent2,explicit))).collect(Collectors.toList());
+        if (favorites.size() > 0) {
+            baby = favorites.get(world.random.nextInt(favorites.size())).create(this.world);
+        }else if (children.size() < 1 || (!explicit && world.getRandom().nextFloat() < 0.10f)) {
+            EntityType<ResourceChicken> child = children.get(world.getRandom().nextInt(children.size()));
+            //EntityType<ChickenEntity>) children.toArray()[world.getRandom().nextInt(children.size())];
             baby = child.create(this.world);
+        }else {
+            baby = (ChickenEntity) this.getType().create(this.world);
+            if (passiveEntity instanceof ChickenStats && baby != null)
+                ((ChickenStats)baby).setProduction(ChickenStats.averagePlusProduction(world.getRandom(),this, (ChickenStats) passiveEntity));
         }
-        if (passiveEntity instanceof ChickenStats)
-            ((ChickenStats)baby).setProduction(ChickenStats.averagePlusProduction(world.getRandom(),this, (ChickenStats) passiveEntity));
+
         info.setReturnValue(baby);
     }
 

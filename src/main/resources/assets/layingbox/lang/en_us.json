@@ -1,4 +1,5 @@
 {
+  "gamerule.LayingBox_biomerequired": "Biome specific resource chickens",
   "block.layingbox.laying_box": "Laying Box",
   "block.layingbox.egg_collector": "Egg Collector",
   "item.layingbox.animal_net": "Animal Net",

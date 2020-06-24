@@ -3,7 +3,7 @@ package mod.linguardium.layingbox;
 import com.swordglowsblue.artifice.api.ArtificeResourcePack;
 import com.swordglowsblue.artifice.impl.ArtificeResourcePackImpl;
 import mod.linguardium.layingbox.config.ChickenConfigs;
-import mod.linguardium.layingbox.entity.ModEntities;
+import mod.linguardium.layingbox.entity.ModEntitiesClient;
 import mod.linguardium.layingbox.render.LayingBoxRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -20,7 +20,7 @@ public class LayingBoxMainClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockEntityRendererRegistry.INSTANCE.register(LAYING_BOX_ENTITY, LayingBoxRenderer::new);
-        ModEntities.initClient();
+        ModEntitiesClient.initClient();
         ChickenConfigs.registerAssets();
     }
 }
