@@ -4,7 +4,6 @@ import mod.linguardium.layingbox.LayingBoxMain;
 import mod.linguardium.layingbox.api.ChickenStats;
 import mod.linguardium.layingbox.api.LayingBoxProvider;
 import mod.linguardium.layingbox.config.ChickenConfigs;
-import mod.linguardium.layingbox.entity.ResourceChicken;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -55,18 +54,20 @@ public abstract class ChickenProviderMixin extends AnimalEntity implements Layin
     private void LayingBox_MakinBabies(PassiveEntity passiveEntity, CallbackInfoReturnable<ChickenEntity> info) {
         Identifier parent1=EntityType.getId(this.getType());
         Identifier parent2=EntityType.getId(passiveEntity.getType());
-        List<EntityType<ResourceChicken>> children = new ArrayList<>(ChickenConfigs.BreedingMap.get(Pair.of(parent1, parent2)));
+        List<EntityType<? extends ChickenEntity>> children = new ArrayList<>(ChickenConfigs.BreedingMap.get(Pair.of(parent1, parent2)));
         if (!parent1.equals(parent2))
             children.addAll(ChickenConfigs.BreedingMap.get(Pair.of(parent2,parent1)));
         ChickenEntity baby;
         boolean explicit = world.getGameRules().getBoolean(LayingBoxMain.requireBiomes);
+        if (explicit)
+            children.add(EntityType.CHICKEN);
         Biome biome_parent1 = world.getBiome(this.getBlockPos());
         Biome biome_parent2 = passiveEntity.getEntityWorld().getBiome(passiveEntity.getBlockPos());
-        List<EntityType<ResourceChicken>> favorites = children.stream().filter(type->(isFavoredBiome(type,biome_parent1,explicit) || isFavoredBiome(type,biome_parent2,explicit))).collect(Collectors.toList());
-        if (favorites.size() > 0) {
+        List<EntityType<? extends ChickenEntity>> favorites = children.stream().filter(type->(isFavoredBiome(type,biome_parent1,explicit) || isFavoredBiome(type,biome_parent2,explicit))).collect(Collectors.toList());
+        if (explicit && favorites.size() > 0) {
             baby = favorites.get(world.random.nextInt(favorites.size())).create(this.world);
         }else if (children.size() < 1 || (!explicit && world.getRandom().nextFloat() < 0.10f)) {
-            EntityType<ResourceChicken> child = children.get(world.getRandom().nextInt(children.size()));
+            EntityType<? extends ChickenEntity> child = children.get(world.getRandom().nextInt(children.size()));
             //EntityType<ChickenEntity>) children.toArray()[world.getRandom().nextInt(children.size())];
             baby = child.create(this.world);
         }else {

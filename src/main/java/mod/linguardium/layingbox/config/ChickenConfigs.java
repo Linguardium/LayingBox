@@ -45,7 +45,7 @@ public class ChickenConfigs {
 
 //    public static Map<Pair<Identifier,Identifier>,EntityType<ResourceChicken>> BreedingMap = Maps.newHashMap();
     public static List<String> eggs = new ArrayList<>();
-    public static Multimap<Pair<Identifier,Identifier>,EntityType<ResourceChicken>> BreedingMap = ArrayListMultimap.create();
+    public static Multimap<Pair<Identifier,Identifier>,EntityType<? extends ChickenEntity>> BreedingMap = ArrayListMultimap.create();
     public static HashMap<Identifier,Set<Identifier>> FavoredBiomeList= Maps.newHashMap();
     public static Path chickenConfigPath = Paths.get( FabricLoader.getInstance().getConfigDirectory().toString() + File.separatorChar + MOD_ID + File.separator + "chickens");
     private static Gson g = new GsonBuilder().setPrettyPrinting().create();
@@ -95,7 +95,6 @@ public class ChickenConfigs {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private static void register(String name, ResourceChickenConfig config) {
@@ -154,9 +153,9 @@ public class ChickenConfigs {
         });
     }
     public static boolean isFavoredBiome(ChickenEntity entity, boolean explicit) {
-        return isFavoredBiome(entity.getType(),entity.getEntityWorld().getBiome(entity.getBlockPos()),explicit);
+        return isFavoredBiome((EntityType<? extends ChickenEntity>) entity.getType(),entity.getEntityWorld().getBiome(entity.getBlockPos()),explicit);
     }
-    public static boolean isFavoredBiome(EntityType type, Biome biome, boolean explicit) {
+    public static boolean isFavoredBiome(EntityType<? extends ChickenEntity> type, Biome biome, boolean explicit) {
         Set<Identifier> favored = FavoredBiomeList.get(EntityType.getId(type));
         if (favored != null) {
             if (explicit && favored.contains(new Identifier("all_biomes"))) {
