@@ -72,8 +72,12 @@ public abstract class ChickenProviderMixin extends AnimalEntity implements Layin
             baby = child.create(this.world);
         }else {
             baby = (ChickenEntity) this.getType().create(this.world);
-            if (passiveEntity instanceof ChickenStats && baby != null)
-                ((ChickenStats)baby).setProduction(ChickenStats.averagePlusProduction(world.getRandom(),this, (ChickenStats) passiveEntity));
+        }
+        if (passiveEntity instanceof ChickenStats && baby != null) {
+            if (this.getType().equals(baby.getType()) || passiveEntity.getType().equals(baby.getType())) {
+                ((ChickenStats) baby).setProduction(ChickenStats.averagePlusProduction(world.getRandom(), this, (ChickenStats) passiveEntity));
+            }
+            
         }
 
         info.setReturnValue(baby);
