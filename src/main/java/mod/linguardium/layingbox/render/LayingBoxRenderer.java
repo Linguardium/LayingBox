@@ -1,6 +1,8 @@
 package mod.linguardium.layingbox.render;
 
+import mod.linguardium.layingbox.blocks.LayingBox;
 import mod.linguardium.layingbox.blocks.blockentity.LayingBoxEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -24,7 +26,11 @@ public class LayingBoxRenderer extends BlockEntityRenderer<LayingBoxEntity>{
         MobEntity e = entity.displayChicken;
         if (e!=null) {
             BlockPos pos = entity.getPos();
-            Direction dir = entity.getWorld().getBlockState(pos).get(HorizontalFacingBlock.FACING);
+            BlockState state = entity.getWorld().getBlockState(pos);
+            if (!(state.getBlock() instanceof LayingBox))
+                return;
+            Direction dir = state.get(HorizontalFacingBlock.FACING);
+
             int lightLevel = WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getPos().offset(dir));
 /*            LivingEntity playerEntity = entity.getWorld().getClosestPlayer(pos.getX(),pos.getY(),pos.getZ(),8,player->{
                 if (player instanceof PlayerEntity) {
