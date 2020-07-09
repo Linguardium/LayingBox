@@ -26,7 +26,7 @@ public class LayingBoxRenderer extends BlockEntityRenderer<LayingBoxEntity>{
         MobEntity e = entity.displayChicken;
         if (e!=null) {
             BlockPos pos = entity.getPos();
-            BlockState state = entity.getWorld().getBlockState(pos);
+            BlockState state = entity.getCachedState();
             if (!(state.getBlock() instanceof LayingBox))
                 return;
             Direction dir = state.get(HorizontalFacingBlock.FACING);

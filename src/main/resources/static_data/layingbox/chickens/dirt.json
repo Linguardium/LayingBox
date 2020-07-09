@@ -1,0 +1,6 @@
+{
+  "base_color": 9858122,
+  "accent_color": 9474192,
+  "dropItem": "minecraft:dirt",
+  "accent_texture":"layingbox:textures/entity/chicken/speckled.png"
+}

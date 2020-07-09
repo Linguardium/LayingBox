@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "layingbox:block/pelletizer",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "layingbox:block/pelletizer"
+    },
+    "facing=south": {
+      "model": "layingbox:block/pelletizer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "layingbox:block/pelletizer",
+      "y": 270
+    }
+  }
+}

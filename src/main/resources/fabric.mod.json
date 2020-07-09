@@ -24,6 +24,7 @@
   "mixins": [
     "layingbox.mixins.json"
   ],
+  "accessWidener" : "layingbox.accesswidener",
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": "*"

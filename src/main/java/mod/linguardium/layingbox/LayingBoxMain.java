@@ -1,11 +1,15 @@
 package mod.linguardium.layingbox;
 
+import mod.linguardium.layingbox.recipes.ModRecipes;
 import mod.linguardium.layingbox.blocks.ModBlocks;
 import mod.linguardium.layingbox.config.ChickenConfigs;
 import mod.linguardium.layingbox.entity.ModEntities;
+import mod.linguardium.layingbox.gui.ModGUIs;
 import mod.linguardium.layingbox.items.ModItems;
+import mod.linguardium.layingbox.items.PelletItem;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,6 +29,7 @@ public class LayingBoxMain implements ModInitializer {
     public static final String MOD_NAME = "LayingBox";
     public static ItemGroup CHICKEN_EGGS_GROUP = FabricItemGroupBuilder.create(new Identifier(MOD_ID,"spawn_eggs_group")).icon(()-> new ItemStack(Items.CAT_SPAWN_EGG)).build();
     public static ItemGroup ITEM_GROUP = FabricItemGroupBuilder.create(new Identifier(MOD_ID,"item_group")).icon(()-> new ItemStack(LAYING_BOX)).build();
+    public static ItemGroup ITEM_GROUP_PELLETS = FabricItemGroupBuilder.create(new Identifier(MOD_ID,"pellets_group")).icon(()-> new ItemStack(new PelletItem(9858122,5991183,9858122,new Item.Settings()))).build();
 
     public static GameRules.Key<GameRules.BooleanRule> requireBiomes = new GameRules.Key<GameRules.BooleanRule>("LayingBox_biomerequired", GameRules.Category.MOBS);
 
@@ -35,6 +40,8 @@ public class LayingBoxMain implements ModInitializer {
         ModItems.init();
         ModEntities.init();
         ChickenConfigs.init();
+        ModGUIs.init();
+        ModRecipes.init();
         log(Level.INFO, "1, 2, 3 chicken (eggs)");
     }
 

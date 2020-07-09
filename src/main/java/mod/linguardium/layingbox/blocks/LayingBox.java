@@ -46,7 +46,6 @@ public class LayingBox extends HorizontalFacingBlock implements InventoryProvide
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
-       // return super.getRenderType(state);
     }
 
     @Override

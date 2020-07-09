@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "layingbox:block/pelletizer"
+    }
+  }
+}

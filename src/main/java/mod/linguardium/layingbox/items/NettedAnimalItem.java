@@ -19,6 +19,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -53,7 +54,9 @@ public class NettedAnimalItem extends Item {
             EntityType type= EntityType.get(tag.getString("id")).orElse(null);
             if (type!=null) {
                 //Vec3d vPos = context.getHitPos();
-                Entity e = type.spawnFromItemStack(world, context.getStack(), context.getPlayer(),new BlockPos(context.getHitPos()), SpawnReason.NATURAL, false, false);
+                BlockPos spawnPos = (state.getCollisionShape(world, pos).isEmpty())?pos:pos.offset(context.getSide());
+
+                Entity e = type.spawnFromItemStack(world, context.getStack(), context.getPlayer(),spawnPos, SpawnReason.NATURAL, true,  !pos.equals(spawnPos) && context.getSide() == Direction.UP);
                 //e.resetPosition(vPos.getX(),vPos.getY(),vPos.getZ());
                 if (e!=null) {
                     context.getStack().decrement(1);

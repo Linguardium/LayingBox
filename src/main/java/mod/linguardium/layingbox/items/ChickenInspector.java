@@ -1,9 +1,9 @@
 package mod.linguardium.layingbox.items;
 
-import mod.linguardium.layingbox.api.ChickenStats;
+import mod.linguardium.layingbox.api.components.ChickenComponent;
+import mod.linguardium.layingbox.api.components.ModComponents;
 import mod.linguardium.layingbox.blocks.blockentity.LayingBoxEntity;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,6 +13,8 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+
+import java.util.Optional;
 
 public class ChickenInspector extends Item {
 
@@ -25,11 +27,10 @@ public class ChickenInspector extends Item {
         BlockEntity be =context.getWorld().getBlockEntity(context.getBlockPos());
         if (be instanceof LayingBoxEntity) {
             if (!context.getWorld().isClient()) {
+                PlayerEntity player = context.getPlayer();
                 for (ItemStack stack : ((LayingBoxEntity) be).chickens) {
-                    Entity entity = EntityType.getEntityFromTag(stack.getOrCreateSubTag("EntityTag"), context.getWorld()).orElse(null);
-                    if (entity instanceof ChickenStats) {
-                        context.getPlayer().sendMessage(new TranslatableText("message.layingbox.production", entity.getDisplayName(), ((ChickenStats) entity).getProduction() / 100.0f), false);
-                    }
+                    LivingEntity entity = (LivingEntity) EntityType.getEntityFromTag(stack.getOrCreateSubTag("EntityTag"), context.getWorld()).orElse(null);
+                    displayProductionValue(player,entity);
                 }
             }
             return ActionResult.SUCCESS;
@@ -39,13 +40,18 @@ public class ChickenInspector extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        if (entity instanceof ChickenStats) {
             if (!user.world.isClient()) {
-                user.sendMessage(new TranslatableText("message.layingbox.production", entity.getDisplayName(), ((ChickenStats) entity).getProduction() / 100.0f), false);
+                displayProductionValue(user,entity);
             }
             return ActionResult.SUCCESS;
-        }
-        return super.useOnEntity(stack, user, entity, hand);
     }
+    public static void displayProductionValue(PlayerEntity player, LivingEntity entity) {
+        if (player == null || entity==null)
+            return;
+        Optional<ChickenComponent> productionComponent = ModComponents.CHICKEN.maybeGet(entity);
+        productionComponent.ifPresent(chickenComponent ->
+                player.sendMessage(new TranslatableText("message.layingbox.production", entity.getDisplayName(), (chickenComponent.getProduction() / 100.0f)), false)
+        );
 
+    }
 }
