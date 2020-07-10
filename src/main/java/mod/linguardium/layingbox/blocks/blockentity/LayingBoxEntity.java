@@ -55,7 +55,7 @@ public class LayingBoxEntity extends BlockEntity implements BlockEntityClientSer
         return chicken;
     }
     public boolean addChicken(ItemStack stack) {
-        if (chickens.size()<world.getGameRules().getInt(GameRules.field_19405)) {
+        if (chickens.size()<world.getGameRules().getInt(GameRules.MAX_ENTITY_CRAMMING)) {
             CompoundTag itemTag = stack.getOrCreateTag();
             if (itemTag.contains("EntityTag", NbtType.COMPOUND)) {
                 CompoundTag entityTag = itemTag.getCompound("EntityTag");
@@ -72,7 +72,7 @@ public class LayingBoxEntity extends BlockEntity implements BlockEntityClientSer
         return false;
     }
     public boolean addChicken(LayingBoxProvider<MobEntity> entity) {
-        if (chickens.size()<world.getGameRules().getInt(GameRules.field_19405)) {
+        if (chickens.size()<world.getGameRules().getInt(GameRules.MAX_ENTITY_CRAMMING)) {
             ItemStack stack = new ItemStack(NETTED_ANIMAL);
             CompoundTag tag = ((MobEntity)entity).toTag(new CompoundTag());
             tag.putString("id",EntityType.getId(((MobEntity)entity).getType()).toString());

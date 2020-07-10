@@ -25,6 +25,7 @@ repositories {
 		name = "CottonMC"
 		url = "https://server.bbkr.space/artifactory/libs-release"
 	}
+	maven { url 'https://maven.blamejared.com' }
 	maven { url 'https://jitpack.io' }
 }
 dependencies {
@@ -57,6 +58,8 @@ dependencies {
 
 	modImplementation("io.github.cottonmc:UniversalComponents:${project.uc_version}") { transitive = false }
 	include "io.github.cottonmc:UniversalComponents:${project.uc_version}"
+
+	modImplementation("vazkii.patchouli:Patchouli_1.16-fabric:1.16-37.21-FABRIC")
 }
 
 processResources {

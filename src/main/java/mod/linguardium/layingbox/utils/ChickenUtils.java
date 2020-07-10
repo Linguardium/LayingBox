@@ -27,9 +27,11 @@ public class ChickenUtils {
     }
     public static Identifier getBabyType(Random random, Identifier p1Id, Biome p1Biome, Identifier p2Id, Biome p2Biome, boolean explicit) {
         List<EntityType> list = Lists.newArrayList();
-        if (p1Id.equals(p2Id)) {
+        if (p1Id.equals(p2Id) && explicit) {
+            // if both parents are the same and it is explicit to biomes (allows breeding same parents in any biome)
             list.add(Registry.ENTITY_TYPE.get(p1Id));
         }
+        // add all the chicken types according to biome (or not)
         chickens.forEach((type,config)->{
             boolean p1is1 = config.parent1.equals(p1Id);
             boolean p1is2 = config.parent1.equals(p2Id);
@@ -38,19 +40,24 @@ public class ChickenUtils {
             if (p1is1 && p2is2 || p1is2 && p2is1) {
                if (!explicit) {
                    list.add(type);
+               }else if(isFavoredBiome(type,p1Biome, false) || isFavoredBiome(type,p2Biome, false)) {
+                   list.add(type); // extra chance in explicit to spawn specific biome types rather than all biome types
                }
                if (isFavoredBiome(type,p1Biome, explicit) || isFavoredBiome(type,p2Biome, explicit)) {
                    list.add(type);
                }
+
+
             }
         });
+        // list is now "dual parent type + list of chicken types spawnable here"
         if (explicit) {
-            list.add(EntityType.CHICKEN);
-            list.add(EntityType.CHICKEN);
-            return Registry.ENTITY_TYPE.getId(list.get(random.nextInt(list.size())));
+            return Registry.ENTITY_TYPE.getId(list.get(random.nextInt(list.size()))); // parent type or biome specific type
         }
         if (list.size() > 0 && random.nextFloat()<0.10F) {
-            return Registry.ENTITY_TYPE.getId(list.get(random.nextInt(list.size())));
+            return Registry.ENTITY_TYPE.getId(list.get(random.nextInt(list.size()))); // chance of parent type or biome specific type at 10%/# of types
+        }else if (p1Id.equals(p2Id)){ // parent type
+            return p1Id;
         }
         return Registry.ENTITY_TYPE.getId(EntityType.CHICKEN);
         /// list = all children possible from group

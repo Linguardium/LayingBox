@@ -36,10 +36,11 @@ public class ModBlocks {
         EGG_COLLECTOR_ENTITY =  Registry.register(Registry.BLOCK_ENTITY_TYPE,new Identifier(MOD_ID, "egg_collector_blockentity"),BlockEntityType.Builder.create(EggCollectorEntity::new, EGG_COLLECTOR).build(null));
         PELLETIZER = Registry.register(Registry.BLOCK,new Identifier(MOD_ID,"pelletizer"),new Pelletizer(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).suffocates(always).allowsSpawning(typed_never).solidBlock(always)) );
         PELLETIZER_ENTITY =  Registry.register(Registry.BLOCK_ENTITY_TYPE,new Identifier(MOD_ID, "pelletizer_blockentity"),BlockEntityType.Builder.create(PelletizerEntity::new, PELLETIZER).build(null));
-        AUTOMATIC_PELLETIZER = Registry.register(Registry.BLOCK,new Identifier(MOD_ID,"automatic_pelletizer"),new Pelletizer(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).suffocates(always).allowsSpawning(typed_never).solidBlock(always)) );
+        AUTOMATIC_PELLETIZER = Registry.register(Registry.BLOCK,new Identifier(MOD_ID,"automatic_pelletizer"),new AutomaticPelletizer(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).suffocates(always).allowsSpawning(typed_never).solidBlock(always)) );
         AUTOMATIC_PELLETIZER_ENTITY =  Registry.register(Registry.BLOCK_ENTITY_TYPE,new Identifier(MOD_ID, "automatic_pelletizer_blockentity"),BlockEntityType.Builder.create(AutomaticPelletizerEntity::new, AUTOMATIC_PELLETIZER).build(null));
         Registry.register(Registry.ITEM,new Identifier(MOD_ID,"laying_box"),new BlockItem(LAYING_BOX, new Item.Settings().group(LayingBoxMain.ITEM_GROUP)));
         Registry.register(Registry.ITEM,new Identifier(MOD_ID,"egg_collector"),new BlockItem(EGG_COLLECTOR, new Item.Settings().group(LayingBoxMain.ITEM_GROUP)));
         Registry.register(Registry.ITEM,new Identifier(MOD_ID,"pelletizer"),new BlockItem(PELLETIZER, new Item.Settings().group(LayingBoxMain.ITEM_GROUP)));
+        Registry.register(Registry.ITEM,new Identifier(MOD_ID,"automatic_pelletizer"),new BlockItem(AUTOMATIC_PELLETIZER, new Item.Settings().group(LayingBoxMain.ITEM_GROUP)));
     }
 }

@@ -1,10 +1,11 @@
 {
 	"credit": "Made with Blockbench",
+	"parent": "block/cube_column",
 	"textures": {
-		"2": "block/smooth_stone",
+		"2": "layingbox:block/autopelletizer",
 		"3": "layingbox:block/black",
 		"4": "block/redstone_block",
-		"particle": "block/smooth_stone"
+		"particle": "layingbox:block/autopelletizer"
 	},
 	"elements": [
 		{
