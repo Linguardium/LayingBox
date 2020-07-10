@@ -66,18 +66,21 @@ public abstract class ChickenProviderMixin extends AnimalEntity implements Layin
         List<EntityType<? extends ChickenEntity>> favorites = children.stream().filter(type->(isFavoredBiome(type,biome_parent1,explicit) || isFavoredBiome(type,biome_parent2,explicit))).collect(Collectors.toList());
         if (explicit && favorites.size() > 0) {
             baby = favorites.get(world.random.nextInt(favorites.size())).create(this.world);
-        }else if (children.size() < 1 || (!explicit && world.getRandom().nextFloat() < 0.10f)) {
+        }else if (!explicit && children.size() > 0 && world.getRandom().nextFloat() < 0.10f) {
             EntityType<? extends ChickenEntity> child = children.get(world.getRandom().nextInt(children.size()));
             //EntityType<ChickenEntity>) children.toArray()[world.getRandom().nextInt(children.size())];
             baby = child.create(this.world);
         }else {
-            baby = (ChickenEntity) this.getType().create(this.world);
+            if (this.getType().equals(passiveEntity.getType())) {
+                baby = (ChickenEntity) this.getType().create(this.world);
+            }else {
+                baby = EntityType.CHICKEN.create(this.world);
+            }
         }
         if (passiveEntity instanceof ChickenStats && baby != null) {
             if (this.getType().equals(baby.getType()) || passiveEntity.getType().equals(baby.getType())) {
                 ((ChickenStats) baby).setProduction(ChickenStats.averagePlusProduction(world.getRandom(), this, (ChickenStats) passiveEntity));
             }
-            
         }
 
         info.setReturnValue(baby);
